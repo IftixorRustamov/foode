@@ -3,7 +3,7 @@
 // import 'package:kursol/core/utils/responsiveness/app_responsive.dart';
 // import '../../../di/service_locator.dart';
 // import '../../constants/colors/app_colors.dart';
-// import '../../textstyles/urbanist_textstyles.dart';
+// import '../../textstyles/source_san_textstyles.dart';
 //
 // class ActionAppBarWg extends StatelessWidget implements PreferredSizeWidget {
 //   const ActionAppBarWg({
