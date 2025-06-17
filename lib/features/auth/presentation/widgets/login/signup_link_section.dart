@@ -1,6 +1,5 @@
-// lib/features/auth/presentation/widgets/signup_link_section.dart
-
 import 'package:flutter/material.dart';
+import 'package:uic_task/core/common/textstyles/source_san_textstyles.dart';
 import 'package:uic_task/service_locator.dart';
 
 import '../../../../../core/common/constants/colors/app_colors.dart';
@@ -11,7 +10,7 @@ class SignUpLinkSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppTextStyles textStyles = sl<AppTextStyles>();
+    final AppTextStyles textStyles = sl<SourceSanTextStyles>();
     return Align(
       alignment: Alignment.center,
       child: Row(
@@ -19,7 +18,7 @@ class SignUpLinkSection extends StatelessWidget {
         children: [
           Text(
             "Don't have an account? ",
-            style: textStyles.regular(color: AppColors.neutral3, fontSize: 14),
+            style: textStyles.regular(color: AppColors.neutral5, fontSize: 16),
           ),
           GestureDetector(
             onTap: () {
@@ -30,7 +29,10 @@ class SignUpLinkSection extends StatelessWidget {
             },
             child: Text(
               'Sign up',
-              style: textStyles.medium(color: AppColors.primary, fontSize: 14),
+              style: textStyles.semiBold(
+                color: AppColors.primary,
+                fontSize: 16,
+              ),
             ),
           ),
         ],

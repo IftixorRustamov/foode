@@ -16,14 +16,14 @@ import '../widgets/login/sign_button.dart';
 import '../widgets/login/signup_link_section.dart';
 import '../widgets/login/social_login_buttons.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 backgroundColor:
-                    AppColors.success, // Use AppColors.successGreen
+                AppColors.success, // Use AppColors.successGreen
               ),
             );
             // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const HomePage()));

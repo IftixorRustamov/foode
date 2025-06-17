@@ -18,14 +18,21 @@ class SocialLoginButtons extends StatelessWidget {
           child: OutlinedButton.icon(
             onPressed: () {},
             style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 14),
+              padding: EdgeInsets.symmetric(
+                vertical: appH(16),
+                horizontal: appW(24),
+              ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-                side: BorderSide(color: AppColors.neutral7, width: 1),
+                borderRadius: BorderRadius.circular(15),
+                side: BorderSide(width: 1, color: AppColors.white),
               ),
               foregroundColor: AppColors.neutral1,
             ),
-            icon: const Icon(Icons.facebook, color: Color(0xFF1877F2)),
+            icon: Image.asset(
+              'assets/images/facebook.png',
+              height: appH(25),
+              width: appW(25),
+            ),
             // Facebook icon
             label: Text(
               'Facebook',
@@ -33,17 +40,20 @@ class SocialLoginButtons extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 16), // Spacing between buttons
+        SizedBox(width: appW(16)),
         Expanded(
           child: OutlinedButton.icon(
             onPressed: () {},
             style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 14),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-                side: BorderSide(color: AppColors.neutral7, width: 1),
+              padding: EdgeInsets.symmetric(
+                vertical: appH(16),
+                horizontal: appW(24),
               ),
-              foregroundColor: AppColors.neutral1,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+                side: BorderSide(color: AppColors.white, width: 1),
+              ),
+              foregroundColor: AppColors.white,
             ),
             icon: Image.asset(
               'assets/images/google.png',

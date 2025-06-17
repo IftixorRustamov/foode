@@ -1,7 +1,6 @@
-// lib/core/common/widgets/custom_text_field.dart
-
 import 'package:flutter/material.dart';
 import 'package:uic_task/core/common/constants/colors/app_colors.dart'; // Absolute path
+import 'package:uic_task/core/utils/responsiveness/app_responsive.dart';
 import 'package:uic_task/service_locator.dart';
 
 import '../textstyles/app_textstyles.dart';
@@ -13,9 +12,6 @@ class CustomTextField extends StatefulWidget {
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
   final Widget? suffixIcon;
-  final String? helperText;
-  final Color? helperTextColor;
-  final Widget? prefixIcon; // Allow custom prefix icon
 
   const CustomTextField({
     super.key,
@@ -25,9 +21,6 @@ class CustomTextField extends StatefulWidget {
     this.validator,
     this.keyboardType,
     this.suffixIcon,
-    this.helperText,
-    this.helperTextColor,
-    this.prefixIcon, // Pass prefix icon
   });
 
   @override
@@ -52,43 +45,29 @@ class _CustomTextFieldState extends State<CustomTextField> {
       obscureText: _isObscure,
       validator: widget.validator,
       keyboardType: widget.keyboardType,
-      style: textStyles.regular(color: AppColors.neutral1, fontSize: 16),
+      style: textStyles.semiBold(color: AppColors.black, fontSize: 16),
       decoration: InputDecoration(
         hintText: widget.hintText,
         hintStyle: textStyles.regular(color: AppColors.neutral5, fontSize: 16),
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: 16.0,
-          horizontal: 20.0,
+        contentPadding: EdgeInsets.symmetric(
+          vertical: appH(12),
+          horizontal: appW(24),
         ),
-        fillColor: AppColors.neutral8,
+        fillColor: AppColors.neutral9,
         filled: true,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(100.0),
           borderSide: BorderSide.none,
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(
-            color: AppColors.primary,
-            width: 1.5,
-          ), // Changed to AppColors.primary
-        ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(100.0),
           borderSide: BorderSide.none,
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(100.0),
           borderSide: const BorderSide(
             color: AppColors.error,
             width: 1.5,
-          ), // Changed to AppColors.error
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(
-            color: AppColors.error,
-            width: 2.0,
           ), // Changed to AppColors.error
         ),
         suffixIcon: widget.obscureText
@@ -104,13 +83,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 },
               )
             : widget.suffixIcon,
-        helperText: widget.helperText,
-        helperStyle: textStyles.regular(
-          color: widget.helperTextColor ?? AppColors.neutral3,
-          fontSize: 12,
-        ),
-        prefixIcon: widget.prefixIcon,
-        // Use the passed prefixIcon
         prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
       ),
     );
