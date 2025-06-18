@@ -5,6 +5,7 @@ import 'package:uic_task/features/auth/domain/entities/user_entity.dart';
 import 'package:uic_task/features/auth/domain/repositories/auth_repository.dart';
 import 'package:uic_task/features/auth/domain/usecases/sign_in_anonymously_usecase.dart';
 import 'dart:async';
+import 'package:uic_task/core/utils/logger/app_logger.dart';
 
 import 'package:uic_task/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:uic_task/features/auth/domain/usecases/sign_up_usecase.dart';
@@ -37,6 +38,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthCheckStatusEvent>(_onCheckStatus);
     on<AuthUserChangedEvent>(_onUserChanged);
     on<AuthSignInAnonymouslyEvent>(_onSignInAnonymously);
+    on<AuthUpdateBioEvent>(_onUpdateBio);
 
     // Listen to auth state changes from the repository
     _userSubscription = _authRepository.getCurrentUser().listen(
@@ -45,13 +47,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onSignIn(AuthSignInEvent event, Emitter<AuthState> emit) async {
+    logger.d('Attempting sign in with email: ${event.email}');
     emit(AuthLoading());
     final result = await _signInUseCase(
       SignInParams(email: event.email, password: event.password),
     );
     result.fold(
-      (failure) => emit(AuthError(message: _mapFailureToMessage(failure))),
-      (user) => emit(AuthAuthenticated(user: user)),
+      (failure) {
+        logger.e('Sign in failed', error: failure, stackTrace: StackTrace.current);
+        emit(AuthError(message: _mapFailureToMessage(failure)));
+      },
+      (user) {
+        logger.i('Sign in successful for user: ${user.email}');
+        emit(AuthAuthenticated(user: user));
+      },
     );
   }
 
@@ -114,6 +123,32 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } else {
       emit(AuthUnauthenticated());
     }
+  }
+
+  Future<void> _onUpdateBio(AuthUpdateBioEvent event, Emitter<AuthState> emit) async {
+    logger.d('Attempting to update bio for user: ${event.uid}');
+    emit(AuthLoading());
+    
+    final result = await _authRepository.updateUserBio(
+      uid: event.uid,
+      fullName: event.fullName,
+      nickName: event.nickName,
+      phoneNumber: event.phoneNumber,
+      gender: event.gender,
+      dateOfBirth: event.dateOfBirth,
+      address: event.address,
+    );
+    
+    result.fold(
+      (failure) {
+        logger.e('Bio update failed', error: failure, stackTrace: StackTrace.current);
+        emit(AuthError(message: _mapFailureToMessage(failure)));
+      },
+      (_) {
+        logger.i('Bio update successful');
+        emit(const AuthBioUpdated());
+      },
+    );
   }
 
   String _mapFailureToMessage(Failure failure) {

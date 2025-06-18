@@ -120,4 +120,36 @@ class AuthRepositoryImpl implements AuthRepository {
   Stream<UserEntity?> getCurrentUser() {
     return remoteDataSource.firebaseUser.map(_mapFirebaseUserToEntity);
   }
+
+  @override
+  Future<Either<Failure, Unit>> updateUserBio({
+    required String uid,
+    required String fullName,
+    required String nickName,
+    required String phoneNumber,
+    required String gender,
+    required DateTime dateOfBirth,
+    required String address,
+  }) async {
+    try {
+      await remoteDataSource.updateUserBio(
+        uid: uid,
+        fullName: fullName,
+        nickName: nickName,
+        phoneNumber: phoneNumber,
+        gender: gender,
+        dateOfBirth: dateOfBirth,
+        address: address,
+      );
+      return const Right(unit);
+    } on Failure catch (e) {
+      return Left(e);
+    } catch (e) {
+      return const Left(
+        UnknownFailure(
+          message: 'An unexpected error occurred while updating bio.',
+        ),
+      );
+    }
+  }
 }

@@ -79,6 +79,65 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Stream<User?> get firebaseUser => _firebaseAuth.authStateChanges();
 
+  @override
+  Future<void> updateUserBio({
+    required String uid,
+    required String fullName,
+    required String nickName,
+    required String phoneNumber,
+    required String gender,
+    required DateTime dateOfBirth,
+    required String address,
+  }) async {
+    try {
+      print('Attempting to update bio for user: $uid'); // Debug print
+      
+      final userDoc = _firestore.collection('users').doc(uid);
+      
+      // First check if the document exists
+      final docSnapshot = await userDoc.get();
+      print('Document exists: ${docSnapshot.exists}'); // Debug print
+      
+      if (!docSnapshot.exists) {
+        print('Creating new user document'); // Debug print
+        // Create the document if it doesn't exist
+        await userDoc.set({
+          'email': _firebaseAuth.currentUser?.email,
+          'createdAt': Timestamp.now(),
+          'fullName': fullName,
+          'nickName': nickName,
+          'phoneNumber': phoneNumber,
+          'gender': gender,
+          'dateOfBirth': Timestamp.fromDate(dateOfBirth),
+          'address': address,
+          'updatedAt': Timestamp.now(),
+        });
+      } else {
+        print('Updating existing user document'); // Debug print
+        // Update the existing document
+        await userDoc.update({
+          'fullName': fullName,
+          'nickName': nickName,
+          'phoneNumber': phoneNumber,
+          'gender': gender,
+          'dateOfBirth': Timestamp.fromDate(dateOfBirth),
+          'address': address,
+          'updatedAt': Timestamp.now(),
+        });
+      }
+      print('Bio update completed successfully'); // Debug print
+    } on FirebaseException catch (e) {
+      print('Firebase error updating bio: ${e.code} - ${e.message}'); // Debug print
+      throw _handleFirebaseAuthException(FirebaseAuthException(
+        code: e.code,
+        message: e.message,
+      ));
+    } catch (e) {
+      print('Unknown error updating bio: $e'); // Debug print
+      throw const UnknownFailure();
+    }
+  }
+
   // Helper method to map FirebaseAuthException codes to our custom Failures
   Failure _handleFirebaseAuthException(FirebaseAuthException e) {
     switch (e.code) {

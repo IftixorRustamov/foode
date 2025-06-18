@@ -6,7 +6,7 @@ import 'package:uic_task/service_locator.dart';
 
 class DefaultButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const DefaultButton({super.key, required this.text, required this.onPressed});
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uic_task/core/common/textstyles/source_san_textstyles.dart';
+import 'package:uic_task/core/routes/custom_router.dart';
+import 'package:uic_task/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:uic_task/service_locator.dart';
 
 import '../../../../../core/common/constants/colors/app_colors.dart';
@@ -22,10 +24,7 @@ class SignUpLinkSection extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              // Navigate to the SignupPage when tapped
-              // Navigator.of(
-              //   context,
-              // ).push(MaterialPageRoute(builder: (_) => const SignupPage()));
+              CustomRouter.go(SignUpScreen());
             },
             child: Text(
               'Sign up',

@@ -30,3 +30,7 @@ class AuthError extends AuthState {
 }
 
 class AuthUnauthenticated extends AuthState {}
+
+class AuthBioUpdated extends AuthState {
+  const AuthBioUpdated();
+}

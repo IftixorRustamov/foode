@@ -29,11 +29,7 @@ class MyApp extends StatelessWidget {
             theme: AppTheme.lightTheme(),
             darkTheme: AppTheme.darkTheme(),
             themeMode: themeState.themeMode,
-            home: Builder(
-              builder: (context) {
-                return SplashScreen();
-              },
-            ),
+            home: SplashScreen(),
           );
         },
       ),

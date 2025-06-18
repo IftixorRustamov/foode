@@ -17,5 +17,15 @@ abstract class AuthRepository {
 
   Future<Either<Failure, Unit>> signOut();
 
+  Future<Either<Failure, Unit>> updateUserBio({
+    required String uid,
+    required String fullName,
+    required String nickName,
+    required String phoneNumber,
+    required String gender,
+    required DateTime dateOfBirth,
+    required String address,
+  });
+
   Stream<UserEntity?> getCurrentUser();
 }

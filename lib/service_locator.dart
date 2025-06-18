@@ -32,11 +32,11 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
 
   //? Bloc
-  sl.registerFactory(
+  sl.registerLazySingleton(
     () => AuthBloc(
       signInUseCase: sl(),
       signUpUseCase: sl(),
-      authRepository: sl(), //
+      authRepository: sl(),
       signInAnonymouslyUseCase: sl(),
     ),
   );

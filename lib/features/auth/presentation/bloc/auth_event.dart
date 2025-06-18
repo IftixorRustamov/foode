@@ -14,7 +14,7 @@ class AuthSignInEvent extends AuthEvent {
   const AuthSignInEvent({required this.email, required this.password});
 
   @override
-  List<Object> get props => [email, password];
+  List<Object?> get props => [email, password];
 }
 
 class AuthSignUpEvent extends AuthEvent {
@@ -24,7 +24,38 @@ class AuthSignUpEvent extends AuthEvent {
   const AuthSignUpEvent({required this.email, required this.password});
 
   @override
-  List<Object> get props => [email, password];
+  List<Object?> get props => [email, password];
+}
+
+class AuthUpdateBioEvent extends AuthEvent {
+  final String uid;
+  final String fullName;
+  final String nickName;
+  final String phoneNumber;
+  final String gender;
+  final DateTime dateOfBirth;
+  final String address;
+
+  const AuthUpdateBioEvent({
+    required this.uid,
+    required this.fullName,
+    required this.nickName,
+    required this.phoneNumber,
+    required this.gender,
+    required this.dateOfBirth,
+    required this.address,
+  });
+
+  @override
+  List<Object?> get props => [
+    uid,
+    fullName,
+    nickName,
+    phoneNumber,
+    gender,
+    dateOfBirth,
+    address,
+  ];
 }
 
 class AuthSignOutEvent extends AuthEvent {}
@@ -33,7 +64,6 @@ class AuthCheckStatusEvent extends AuthEvent {}
 
 class AuthSignInAnonymouslyEvent extends AuthEvent {}
 
-/// Event triggered when an authenticated user is received (internal bloc event).
 class AuthUserChangedEvent extends AuthEvent {
   final UserEntity? user;
 

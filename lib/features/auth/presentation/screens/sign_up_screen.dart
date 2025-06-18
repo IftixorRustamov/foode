@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uic_task/core/common/constants/sizes.dart';
+import 'package:uic_task/core/routes/custom_router.dart';
 import 'package:uic_task/core/utils/responsiveness/app_responsive.dart';
+import 'package:uic_task/features/auth/presentation/screens/fill_bio_screen.dart';
 import 'package:uic_task/service_locator.dart';
 
 import '../../../../core/common/constants/colors/app_colors.dart';
@@ -11,9 +12,7 @@ import '../widgets/login/auth_heading.dart';
 import '../widgets/login/email_input_field.dart';
 import '../widgets/login/or_divider.dart';
 import '../widgets/login/password_input_field.dart';
-import '../widgets/login/remember_me_forgot_password_row.dart';
 import '../widgets/login/sign_button.dart';
-import '../widgets/login/signup_link_section.dart';
 import '../widgets/login/social_login_buttons.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -27,6 +26,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _rememberMe = false;
 
   @override
   void dispose() {
@@ -35,10 +35,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
   }
 
-  void _onLoginButtonPressed() {
+  void _onSignUpPressed() {
     if (_formKey.currentState!.validate()) {
       sl<AuthBloc>().add(
-        AuthSignInEvent(
+        AuthSignUpEvent(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         ),
@@ -46,12 +46,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
-  void _onRememberMeChanged(bool newValue) {
-    print('Remember Me status: $newValue');
-  }
-
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final topPadding = mediaQuery.padding.top;
+
     return Scaffold(
       backgroundColor: AppColors.white,
       body: BlocListener<AuthBloc, AuthState>(
@@ -61,17 +60,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  'Login Successful!',
+                  'Sign up Successful!',
                   style: textStyles.regular(
                     color: AppColors.white,
                     fontSize: 14,
                   ),
                 ),
-                backgroundColor:
-                AppColors.success, // Use AppColors.successGreen
+                backgroundColor: AppColors.success,
               ),
             );
-            // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const HomePage()));
+            CustomRouter.go(const FillBioScreen());
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -82,37 +80,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     fontSize: 14,
                   ),
                 ),
-                backgroundColor: AppColors.error, // Use AppColors.errorRed
+                backgroundColor: AppColors.error,
               ),
             );
           }
         },
         child: SingleChildScrollView(
-          padding: btm48,
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Form(
             key: _formKey,
             child: Column(
               spacing: appH(32),
               children: [
+                SizedBox(height: topPadding + 16),
                 Image.asset(
                   "assets/images/logo.png",
-                  height: appH(90),
-                  width: appW(90),
+                  height: appH(64),
+                  width: appW(64),
                 ),
-                const AuthHeading(title: 'Sign in to your account'),
                 Column(
                   spacing: appH(20),
                   children: [
+                    const AuthHeading(title: 'Sign up for free'),
                     EmailInputField(
                       controller: _emailController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Email cannot be empty'; // This message will be displayed as errorText
+                          return 'Email cannot be empty';
                         }
                         if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                          return 'Please enter a valid email address'; // This message will be displayed as errorText
+                          return 'Please enter a valid email address';
                         }
-                        return null; // No error
+                        return null;
                       },
                     ),
                     PasswordInputField(
@@ -127,26 +126,57 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         return null;
                       },
                     ),
-                    RememberMeForgotPasswordRow(
-                      onRememberMeChanged: _onRememberMeChanged,
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: _rememberMe,
+                          onChanged: (value) {
+                            setState(() {
+                              _rememberMe = value ?? false;
+                            });
+                          },
+                          activeColor: AppColors.primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                        Text(
+                          'Remember me',
+                          style: sl<AppTextStyles>().regular(
+                            color: AppColors.neutral1,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
                     ),
-                    SignInButton(onPressed: _onLoginButtonPressed),
+                    SignInButton(onPressed: _onSignUpPressed, label: 'Sign up'),
+                  ],
+                ),
+                Column(
+                  children: [const OrDivider(), const SocialLoginButtons()],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Already have an account? ',
+                      style: sl<AppTextStyles>().regular(
+                        color: AppColors.neutral4,
+                        fontSize: 14,
+                      ),
+                    ),
                     GestureDetector(
+                      onTap: () => CustomRouter.close(),
                       child: Text(
-                        "Forgot the password?",
+                        'Sign in',
                         style: sl<AppTextStyles>().semiBold(
                           color: AppColors.primary,
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                     ),
                   ],
                 ),
-                Column(
-                  spacing: appH(24),
-                  children: [const OrDivider(), const SocialLoginButtons()],
-                ),
-                const SignUpLinkSection(),
               ],
             ),
           ),

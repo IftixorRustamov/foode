@@ -32,6 +32,7 @@ dependencies:
   flutter_svg: ^2.1.0
   hydrated_bloc: ^10.0.0
   path_provider: ^2.1.5
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:
@@ -50,4 +51,4 @@ flutter:
   fonts:
     - family: SourceSan
       fonts:
-        - asset: assets/fonts/SourceSans3-VariableFont_wght.ttf
+        - asset: assets/fonts/SourceSansPro-Regular.otf

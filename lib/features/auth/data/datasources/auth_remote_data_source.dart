@@ -15,5 +15,15 @@ abstract class AuthRemoteDataSource {
 
   Future<void> signOut();
 
+  Future<void> updateUserBio({
+    required String uid,
+    required String fullName,
+    required String nickName,
+    required String phoneNumber,
+    required String gender,
+    required DateTime dateOfBirth,
+    required String address,
+  });
+
   Stream<User?> get firebaseUser;
 }
