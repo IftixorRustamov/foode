@@ -5,6 +5,7 @@ import 'package:uic_task/core/common/theme/bloc/theme_bloc.dart';
 import 'package:uic_task/core/routes/custom_router.dart';
 import 'package:uic_task/core/utils/responsiveness/app_responsive.dart';
 import 'package:uic_task/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:uic_task/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:uic_task/features/auth/presentation/screens/splash_screen.dart';
 
 import 'service_locator.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
             theme: AppTheme.lightTheme(),
             darkTheme: AppTheme.darkTheme(),
             themeMode: themeState.themeMode,
-            home: SplashScreen(),
+            home: ForgotPasswordScreen(),
           );
         },
       ),

@@ -5,13 +5,10 @@ import 'package:uic_task/features/auth/domain/entities/user_entity.dart';
 import 'package:uic_task/features/auth/domain/repositories/auth_repository.dart';
 import 'package:uic_task/features/auth/domain/usecases/sign_in_anonymously_usecase.dart';
 import 'dart:async';
-import 'package:uic_task/core/utils/logger/app_logger.dart';
-
 import 'package:uic_task/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:uic_task/features/auth/domain/usecases/sign_up_usecase.dart';
 
 part 'auth_event.dart';
-
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -47,18 +44,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onSignIn(AuthSignInEvent event, Emitter<AuthState> emit) async {
-    logger.d('Attempting sign in with email: ${event.email}');
     emit(AuthLoading());
     final result = await _signInUseCase(
       SignInParams(email: event.email, password: event.password),
     );
     result.fold(
       (failure) {
-        logger.e('Sign in failed', error: failure, stackTrace: StackTrace.current);
         emit(AuthError(message: _mapFailureToMessage(failure)));
       },
       (user) {
-        logger.i('Sign in successful for user: ${user.email}');
         emit(AuthAuthenticated(user: user));
       },
     );
@@ -79,9 +73,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthSignOutEvent event,
     Emitter<AuthState> emit,
   ) async {
-    // Assuming you'll add a SignOutUseCase later
-    // For now, let's just use a direct call (temporarily)
-    // You would typically have a SignOutUseCase here too.
     final result = await _authRepository.signOut();
     result.fold(
       (failure) => emit(AuthError(message: _mapFailureToMessage(failure))),
@@ -126,9 +117,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _onUpdateBio(AuthUpdateBioEvent event, Emitter<AuthState> emit) async {
-    logger.d('Attempting to update bio for user: ${event.uid}');
     emit(AuthLoading());
-    
     final result = await _authRepository.updateUserBio(
       uid: event.uid,
       fullName: event.fullName,
@@ -138,29 +127,43 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       dateOfBirth: event.dateOfBirth,
       address: event.address,
     );
-    
     result.fold(
       (failure) {
-        logger.e('Bio update failed', error: failure, stackTrace: StackTrace.current);
         emit(AuthError(message: _mapFailureToMessage(failure)));
       },
       (_) {
-        logger.i('Bio update successful');
         emit(const AuthBioUpdated());
       },
     );
   }
 
   String _mapFailureToMessage(Failure failure) {
-    if (failure is AuthFailure) {
-      return failure.message ?? 'Authentication failed.';
-    } else if (failure is NetworkFailure) {
-      return 'No internet connection. Please check your network.';
-    } else if (failure is ServerFailure) {
-      return 'Server error. Please try again later.';
-    } else {
-      return 'An unexpected error occurred. Please try again.';
+    final msg = failure.message?.toLowerCase() ?? '';
+    if (failure is NetworkFailure) {
+      return 'No internet connection. Please check your network and try again.';
     }
+    if (failure is ServerFailure) {
+      return 'A server error occurred. Please try again later.';
+    }
+    if (msg.contains('invalid credentials')) {
+      return 'Incorrect email or password. Please try again.';
+    }
+    if (msg.contains('already in use') || msg.contains('email-already-in-use')) {
+      return 'This email is already registered. Please use another email or sign in.';
+    }
+    if (msg.contains('too weak')) {
+      return 'Your password is too weak. Please use a stronger password.';
+    }
+    if (msg.contains('disabled')) {
+      return 'This account has been disabled. Please contact support.';
+    }
+    if (msg.contains('not enabled')) {
+      return 'Email/password sign-in is not enabled. Please contact support.';
+    }
+    if (msg.contains('authentication failed')) {
+      return 'Authentication failed. Please check your credentials.';
+    }
+    return failure.message ?? 'An unexpected error occurred. Please try again.';
   }
 
   @override
