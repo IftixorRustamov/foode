@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:uic_task/core/common/constants/colors/app_colors.dart';
 import 'package:uic_task/core/common/textstyles/app_textstyles.dart';
 import 'package:uic_task/service_locator.dart';
+import 'package:uic_task/core/common/constants/strings/app_strings.dart';
 
 class SignInButton extends StatelessWidget {
   final VoidCallback onPressed;
@@ -12,7 +13,7 @@ class SignInButton extends StatelessWidget {
   const SignInButton({
     super.key,
     required this.onPressed,
-    this.label = 'Sign in',
+    this.label = AppStrings.signIn,
   });
 
   @override

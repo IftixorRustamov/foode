@@ -14,6 +14,7 @@ import '../bloc/auth_bloc.dart';
 import '../widgets/bio/bio_text_field.dart';
 import '../widgets/bio/date_picker_field.dart';
 import '../widgets/bio/gender_dropdown_field.dart';
+import 'package:uic_task/core/common/constants/strings/app_strings.dart';
 
 class FillBioScreen extends StatefulWidget {
   const FillBioScreen({super.key});
@@ -40,17 +41,11 @@ class _FillBioScreenState extends State<FillBioScreen> {
   }
 
   void _onNextPressed() {
-    print('Next button pressed');
     if (_validateFields()) {
       final authBloc = sl<AuthBloc>();
       final currentState = authBloc.state;
 
-      print('Current auth state: $currentState');
-
       if (currentState is AuthAuthenticated) {
-        print(
-          'User is authenticated with UID: ${currentState.user.uid}',
-        ); // Debug print
         authBloc.add(
           AuthUpdateBioEvent(
             uid: currentState.user.uid,
@@ -63,7 +58,6 @@ class _FillBioScreenState extends State<FillBioScreen> {
           ),
         );
       } else {
-        print('User is not authenticated. State: $currentState'); // Debug print
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Please sign in again to update your profile.'),
@@ -137,7 +131,7 @@ class _FillBioScreenState extends State<FillBioScreen> {
                 spacing: appH(24),
                 children: [
                   Text(
-                    'This data will be displayed in your account profile for security',
+                    AppStrings.displayedInProfile,
                     style: sl<AppTextStyles>().semiBold(
                       color: AppColors.neutral1,
                       fontSize: 16,
@@ -148,18 +142,18 @@ class _FillBioScreenState extends State<FillBioScreen> {
                     children: [
                       BioTextField(
                         controller: _fullNameController,
-                        label: 'Full Name',
-                        hint: 'Enter your full name',
+                        label: AppStrings.fullName,
+                        hint: AppStrings.enterFullName,
                       ),
                       BioTextField(
                         controller: _nickNameController,
-                        label: 'Nick Name',
-                        hint: 'Enter your nickname',
+                        label: AppStrings.nickName,
+                        hint: AppStrings.enterNickName,
                       ),
                       BioTextField(
                         controller: _phoneController,
-                        label: 'Phone Number',
-                        hint: 'Enter your phone number',
+                        label: AppStrings.phoneNumber,
+                        hint: AppStrings.enterPhoneNumber,
                         keyboardType: TextInputType.phone,
                       ),
                       GenderDropdownField(

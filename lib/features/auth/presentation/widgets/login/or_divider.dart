@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uic_task/service_locator.dart';
+import 'package:uic_task/core/common/constants/strings/app_strings.dart';
 
 import '../../../../../core/common/constants/colors/app_colors.dart';
 import '../../../../../core/common/textstyles/app_textstyles.dart';
@@ -16,7 +17,7 @@ class OrDivider extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
-            'or continue with',
+            AppStrings.orContinueWith,
             style: textStyles.regular(color: AppColors.black, fontSize: 16),
           ),
         ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:uic_task/core/common/constants/colors/app_colors.dart';
 import 'package:uic_task/core/common/textstyles/app_textstyles.dart';
-import 'package:uic_task/core/utils/logger/app_logger.dart';
 import 'package:uic_task/core/utils/responsiveness/app_responsive.dart';
 import 'package:uic_task/service_locator.dart';
+import 'package:uic_task/core/common/constants/strings/app_strings.dart';
 
 import 'email_input_field.dart';
 import 'password_input_field.dart';
@@ -23,17 +23,16 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _rememberMe = false;
 
   @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    // No credential loading
   }
 
   void _onLoginButtonPressed() {
     if (_formKey.currentState!.validate()) {
-      logger.d('Login button pressed with email: ${_emailController.text}');
       widget.onSubmit(
         _emailController.text.trim(),
         _passwordController.text.trim(),
@@ -42,7 +41,16 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _onRememberMeChanged(bool newValue) {
-    print('Remember Me status: $newValue');
+    setState(() {
+      _rememberMe = newValue;
+    });
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -56,10 +64,10 @@ class _LoginFormState extends State<LoginForm> {
             controller: _emailController,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Email cannot be empty';
+                return AppStrings.emailCannotBeEmpty;
               }
               if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                return 'Please enter a valid email address';
+                return AppStrings.enterValidEmail;
               }
               return null;
             },
@@ -68,21 +76,22 @@ class _LoginFormState extends State<LoginForm> {
             controller: _passwordController,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Password cannot be empty';
+                return AppStrings.passwordCannotBeEmpty;
               }
               if (value.length < 6) {
-                return 'Password must be at least 6 characters';
+                return AppStrings.passwordMinLength;
               }
               return null;
             },
           ),
           RememberMeForgotPasswordRow(
             onRememberMeChanged: _onRememberMeChanged,
+            initialValue: _rememberMe,
           ),
           SignInButton(onPressed: _onLoginButtonPressed),
           GestureDetector(
             child: Text(
-              "Forgot the password?",
+              AppStrings.forgotPassword,
               style: sl<AppTextStyles>().semiBold(
                 color: AppColors.primary,
                 fontSize: 16,

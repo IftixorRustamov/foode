@@ -1,4 +1,3 @@
-// lib/features/auth/presentation/widgets/auth_heading.dart
 
 import 'package:flutter/material.dart';
 import 'package:uic_task/service_locator.dart';

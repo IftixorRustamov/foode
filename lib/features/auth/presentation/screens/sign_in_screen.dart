@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uic_task/core/common/constants/sizes.dart';
+import 'package:uic_task/core/routes/custom_router.dart';
 import 'package:uic_task/core/utils/responsiveness/app_responsive.dart';
+import 'package:uic_task/features/auth/presentation/screens/fill_bio_screen.dart';
+import 'package:uic_task/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:uic_task/service_locator.dart';
 
 import '../../../../core/common/constants/colors/app_colors.dart';
@@ -15,6 +18,7 @@ import '../widgets/login/remember_me_forgot_password_row.dart';
 import '../widgets/login/sign_button.dart';
 import '../widgets/login/signup_link_section.dart';
 import '../widgets/login/social_login_buttons.dart';
+import 'package:uic_task/core/common/constants/strings/app_strings.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -46,12 +50,11 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void _onRememberMeChanged(bool newValue) {
-    print('Remember Me status: $newValue');
-  }
-
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final topPadding = mediaQuery.padding.top;
+
     return Scaffold(
       backgroundColor: AppColors.white,
       body: BlocListener<AuthBloc, AuthState>(
@@ -61,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  'Login Successful!',
+                  AppStrings.loginSuccessful,
                   style: textStyles.regular(
                     color: AppColors.white,
                     fontSize: 14,
@@ -70,6 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 backgroundColor: AppColors.success,
               ),
             );
+            CustomRouter.open(FillBioScreen());
           } else if (state is AuthError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -92,6 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               spacing: appH(32),
               children: [
+                SizedBox(height: topPadding + 16),
                 Image.asset(
                   "assets/images/logo.png",
                   height: appH(90),
@@ -105,10 +110,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _emailController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Email cannot be empty'; // This message will be displayed as errorText
+                          return AppStrings.emailCannotBeEmpty;
                         }
                         if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                          return 'Please enter a valid email address'; // This message will be displayed as errorText
+                          return AppStrings.enterValidEmail;
                         }
                         return null; // No error
                       },
@@ -117,21 +122,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _passwordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Password cannot be empty';
+                          return AppStrings.passwordCannotBeEmpty;
                         }
                         if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
+                          return AppStrings.passwordMinLength;
                         }
                         return null;
                       },
                     ),
                     RememberMeForgotPasswordRow(
-                      onRememberMeChanged: _onRememberMeChanged,
+                      onRememberMeChanged: (value) {},
                     ),
                     SignInButton(onPressed: _onLoginButtonPressed),
                     GestureDetector(
+                      onTap: () => CustomRouter.go(ForgotPasswordScreen()),
                       child: Text(
-                        "Forgot the password?",
+                        AppStrings.forgotPassword,
                         style: sl<AppTextStyles>().semiBold(
                           color: AppColors.primary,
                           fontSize: 16,

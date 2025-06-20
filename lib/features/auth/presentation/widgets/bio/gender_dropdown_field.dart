@@ -3,6 +3,7 @@ import 'package:uic_task/core/common/constants/colors/app_colors.dart';
 import 'package:uic_task/core/common/textstyles/app_textstyles.dart';
 import 'package:uic_task/core/common/textstyles/source_san_textstyles.dart';
 import 'package:uic_task/service_locator.dart';
+import 'package:uic_task/core/common/constants/strings/app_strings.dart';
 
 class GenderDropdownField extends StatelessWidget {
   final String? value;
@@ -20,7 +21,7 @@ class GenderDropdownField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Gender*',
+          AppStrings.gender,
           style: sl<SourceSanTextStyles>().semiBold(
             color: AppColors.neutral1,
             fontSize: 14,
@@ -38,13 +39,13 @@ class GenderDropdownField extends StatelessWidget {
               value: value,
               isExpanded: true,
               hint: Text(
-                'Select gender',
+                AppStrings.selectGender,
                 style: sl<AppTextStyles>().semiBold(
                   color: AppColors.neutral5,
                   fontSize: 14,
                 ),
               ),
-              items: ['Male', 'Female', 'Other']
+              items: [AppStrings.male, AppStrings.female, AppStrings.other]
                   .map(
                     (gender) => DropdownMenuItem(
                       value: gender,

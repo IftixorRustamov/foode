@@ -9,6 +9,7 @@ import 'package:uic_task/features/auth/domain/usecases/sign_in_usecase.dart';
 import 'package:uic_task/features/auth/domain/usecases/sign_up_usecase.dart';
 
 part 'auth_event.dart';
+
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -116,7 +117,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _onUpdateBio(AuthUpdateBioEvent event, Emitter<AuthState> emit) async {
+  Future<void> _onUpdateBio(
+    AuthUpdateBioEvent event,
+    Emitter<AuthState> emit,
+  ) async {
     emit(AuthLoading());
     final result = await _authRepository.updateUserBio(
       uid: event.uid,
@@ -148,7 +152,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (msg.contains('invalid credentials')) {
       return 'Incorrect email or password. Please try again.';
     }
-    if (msg.contains('already in use') || msg.contains('email-already-in-use')) {
+    if (msg.contains('already in use') ||
+        msg.contains('email-already-in-use')) {
       return 'This email is already registered. Please use another email or sign in.';
     }
     if (msg.contains('too weak')) {
@@ -168,7 +173,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   @override
   Future<void> close() {
-    _userSubscription?.cancel(); // Cancel subscription when Bloc is closed
+    _userSubscription?.cancel();
     return super.close();
   }
 }

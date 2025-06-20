@@ -50,6 +50,10 @@
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs access to your location to set your profile location.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>This app needs access to your location to set your profile location.</string>
 	<true/>
 </dict>
 </plist>

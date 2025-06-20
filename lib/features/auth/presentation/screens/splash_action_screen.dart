@@ -4,7 +4,7 @@ import 'package:uic_task/core/common/textstyles/source_san_textstyles.dart';
 import 'package:uic_task/core/common/widgets/button/default_button.dart';
 import 'package:uic_task/core/routes/custom_router.dart';
 import 'package:uic_task/core/utils/responsiveness/app_responsive.dart';
-import 'package:uic_task/features/auth/presentation/screens/login_screen.dart';
+import 'package:uic_task/features/auth/presentation/screens/sign_in_screen.dart';
 import 'package:uic_task/service_locator.dart';
 
 class SplashLightScreen2 extends StatelessWidget {

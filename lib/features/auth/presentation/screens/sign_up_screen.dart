@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uic_task/core/common/constants/sizes.dart';
 import 'package:uic_task/core/routes/custom_router.dart';
 import 'package:uic_task/core/utils/responsiveness/app_responsive.dart';
 import 'package:uic_task/features/auth/presentation/screens/fill_bio_screen.dart';
@@ -14,6 +15,7 @@ import '../widgets/login/or_divider.dart';
 import '../widgets/login/password_input_field.dart';
 import '../widgets/login/sign_button.dart';
 import '../widgets/login/social_login_buttons.dart';
+import 'package:uic_task/core/common/constants/strings/app_strings.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -60,7 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
-                  'Sign up Successful!',
+                  AppStrings.signUpSuccessful,
                   style: textStyles.regular(
                     color: AppColors.white,
                     fontSize: 14,
@@ -86,7 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           }
         },
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: btm48,
           child: Form(
             key: _formKey,
             child: Column(
@@ -95,8 +97,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: topPadding + 16),
                 Image.asset(
                   "assets/images/logo.png",
-                  height: appH(64),
-                  width: appW(64),
+                  height: appH(90),
+                  width: appW(90),
                 ),
                 Column(
                   spacing: appH(20),
@@ -106,10 +108,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       controller: _emailController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Email cannot be empty';
+                          return AppStrings.emailCannotBeEmpty;
                         }
                         if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                          return 'Please enter a valid email address';
+                          return AppStrings.enterValidEmail;
                         }
                         return null;
                       },
@@ -118,10 +120,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       controller: _passwordController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Password cannot be empty';
+                          return AppStrings.passwordCannotBeEmpty;
                         }
                         if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
+                          return AppStrings.passwordMinLength;
                         }
                         return null;
                       },
@@ -141,7 +143,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                         Text(
-                          'Remember me',
+                          AppStrings.rememberMe,
                           style: sl<AppTextStyles>().regular(
                             color: AppColors.neutral1,
                             fontSize: 14,
@@ -153,6 +155,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ],
                 ),
                 Column(
+                  spacing: appH(24),
                   children: [const OrDivider(), const SocialLoginButtons()],
                 ),
                 Row(
@@ -168,7 +171,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     GestureDetector(
                       onTap: () => CustomRouter.close(),
                       child: Text(
-                        'Sign in',
+                        AppStrings.signIn,
                         style: sl<AppTextStyles>().semiBold(
                           color: AppColors.primary,
                           fontSize: 14,

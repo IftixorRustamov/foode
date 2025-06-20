@@ -7,10 +7,12 @@ import '../../../../../core/common/textstyles/app_textstyles.dart';
 
 class RememberMeForgotPasswordRow extends StatefulWidget {
   final ValueChanged<bool> onRememberMeChanged;
+  final bool initialValue;
 
   const RememberMeForgotPasswordRow({
     super.key,
     required this.onRememberMeChanged,
+    this.initialValue = false,
   });
 
   @override
@@ -20,7 +22,13 @@ class RememberMeForgotPasswordRow extends StatefulWidget {
 
 class _RememberMeForgotPasswordRowState
     extends State<RememberMeForgotPasswordRow> {
-  bool _rememberMe = false;
+  late bool _rememberMe;
+
+  @override
+  void initState() {
+    super.initState();
+    _rememberMe = widget.initialValue;
+  }
 
   @override
   Widget build(BuildContext context) {

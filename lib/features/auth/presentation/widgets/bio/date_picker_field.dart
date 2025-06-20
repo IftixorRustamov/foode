@@ -3,6 +3,7 @@ import 'package:uic_task/core/common/constants/colors/app_colors.dart';
 import 'package:uic_task/core/common/textstyles/app_textstyles.dart';
 import 'package:uic_task/core/utils/responsiveness/app_responsive.dart';
 import 'package:uic_task/service_locator.dart';
+import 'package:uic_task/core/common/constants/strings/app_strings.dart';
 
 class DatePickerField extends StatelessWidget {
   final DateTime? selectedDate;
@@ -42,7 +43,7 @@ class DatePickerField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Date of Birth*',
+          AppStrings.dateOfBirth,
           style: sl<AppTextStyles>().semiBold(
             color: AppColors.neutral1,
             fontSize: 14,
@@ -66,7 +67,7 @@ class DatePickerField extends StatelessWidget {
                 Text(
                   selectedDate != null
                       ? '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}'
-                      : 'Select date of birth',
+                      : AppStrings.selectDateOfBirth,
                   style: sl<AppTextStyles>().semiBold(
                     color: selectedDate != null
                         ? AppColors.neutral1

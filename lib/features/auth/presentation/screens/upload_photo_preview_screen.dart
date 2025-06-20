@@ -1,13 +1,14 @@
-import 'dart:io'; // Required for File
-
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart'; // Import image_picker
-import 'package:uic_task/core/common/constants/constants_export.dart'; // Assuming AppStrings is here
+import 'package:image_picker/image_picker.dart';
+import 'package:uic_task/core/common/constants/constants_export.dart';
 import 'package:uic_task/core/common/widgets/app_bar/action_app_bar_wg.dart';
 import 'package:uic_task/core/common/widgets/button/default_button.dart';
 import 'package:uic_task/core/routes/custom_router.dart';
 import 'package:uic_task/core/utils/responsiveness/app_responsive.dart';
+import 'package:uic_task/features/auth/presentation/screens/set_location_screen.dart';
 import 'package:uic_task/service_locator.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../../../core/common/textstyles/app_textstyles.dart';
 
@@ -20,9 +21,9 @@ class UploadPhotoPreviewScreen extends StatefulWidget {
 }
 
 class _UploadPhotoPreviewScreenState extends State<UploadPhotoPreviewScreen> {
-  File? _image; // State variable to hold the picked image
+  File? _image;
 
-  final ImagePicker _picker = ImagePicker(); // Instance of ImagePicker
+  final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImageFromGallery() async {
     final XFile? pickedFile = await _picker.pickImage(
@@ -31,9 +32,7 @@ class _UploadPhotoPreviewScreenState extends State<UploadPhotoPreviewScreen> {
 
     if (pickedFile != null) {
       setState(() {
-        _image = File(
-          pickedFile.path,
-        ); // Update the state with the selected image
+        _image = File(pickedFile.path);
       });
     }
   }
@@ -45,9 +44,7 @@ class _UploadPhotoPreviewScreenState extends State<UploadPhotoPreviewScreen> {
 
     if (pickedFile != null) {
       setState(() {
-        _image = File(
-          pickedFile.path,
-        ); // Update the state with the captured image
+        _image = File(pickedFile.path);
       });
     }
   }
@@ -88,8 +85,8 @@ class _UploadPhotoPreviewScreenState extends State<UploadPhotoPreviewScreen> {
                   ),
                 ),
                 onTap: () {
-                  Navigator.pop(context); // Close the bottom sheet
-                  _pickImageFromGallery(); // Call gallery function
+                  CustomRouter.close();
+                  _pickImageFromGallery();
                 },
               ),
             ],
@@ -99,12 +96,33 @@ class _UploadPhotoPreviewScreenState extends State<UploadPhotoPreviewScreen> {
     );
   }
 
-  void _onNext(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Next pressed! (Implement navigation)')),
-    );
-    if (_image != null) {
-      print('Image path to upload: ${_image!.path}');
+  Future<void> _onNext(BuildContext context) async {
+    if (_image == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a photo first.')),
+      );
+      return;
+    }
+
+    bool uploadSuccess = false;
+    try {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => const Center(child: CircularProgressIndicator()),
+      );
+
+      final fileName =
+          'profile_photos/${DateTime.now().millisecondsSinceEpoch}_${_image!.path.split('/').last}';
+      final ref = FirebaseStorage.instance.ref().child(fileName);
+      final uploadTask = await ref.putFile(_image!);
+      final downloadUrl = await uploadTask.ref.getDownloadURL();
+      uploadSuccess = true;
+    } catch (e) {
+      print(e.toString());
+    } finally {
+      if (Navigator.canPop(context)) CustomRouter.close();
+      CustomRouter.go(SetLocationScreen());
     }
   }
 
@@ -114,7 +132,7 @@ class _UploadPhotoPreviewScreenState extends State<UploadPhotoPreviewScreen> {
       backgroundColor: AppColors.white,
       appBar: ActionAppBarWg(
         onBackPressed: CustomRouter.close,
-        titleText: 'Upload your photo',
+        titleText: AppStrings.uploadYourPhoto,
       ),
       body: SafeArea(
         child: Padding(
@@ -124,10 +142,9 @@ class _UploadPhotoPreviewScreenState extends State<UploadPhotoPreviewScreen> {
             spacing: appH(24),
             children: [
               Text(
-                'This data will be displayed in your account profile for security',
+                AppStrings.displayedInProfile,
                 style: sl<AppTextStyles>().regular(
                   color: AppColors.neutral3,
-                  // Adjusted color for better readability
                   fontSize: 16,
                 ),
               ),
@@ -136,12 +153,11 @@ class _UploadPhotoPreviewScreenState extends State<UploadPhotoPreviewScreen> {
                   children: [
                     CircleAvatar(
                       radius: appH(72),
-                      // Display picked image, otherwise default asset
                       backgroundImage: _image != null
                           ? FileImage(_image!) as ImageProvider<Object>
                           : const AssetImage('assets/images/sample_avatar.jpg'),
                       backgroundColor:
-                          AppColors.neutral7, // Fallback background color
+                          AppColors.neutral7,
                     ),
                     Positioned(
                       bottom: 0,
