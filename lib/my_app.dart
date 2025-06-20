@@ -5,11 +5,11 @@ import 'package:uic_task/core/common/theme/bloc/theme_bloc.dart';
 import 'package:uic_task/core/routes/custom_router.dart';
 import 'package:uic_task/core/utils/responsiveness/app_responsive.dart';
 import 'package:uic_task/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:uic_task/features/auth/presentation/screens/set_location_screen.dart';
-import 'package:uic_task/features/auth/presentation/screens/sign_in_screen.dart';
 import 'package:uic_task/features/auth/presentation/screens/splash_screen.dart';
-import 'package:uic_task/features/auth/presentation/screens/upload_photo_method_screen.dart';
+import 'package:uic_task/features/home/presentation/widgets/bottom_nav_bar.dart';
 
+import 'features/orders/presentation/bloc/cart_bloc.dart';
+import 'features/orders/presentation/bloc/order_history_cubit.dart';
 import 'service_locator.dart';
 
 class MyApp extends StatelessWidget {
@@ -24,6 +24,8 @@ class MyApp extends StatelessWidget {
           create: (context) => sl<AuthBloc>()..add(AuthCheckStatusEvent()),
         ),
         BlocProvider<ThemeBloc>(create: (context) => ThemeBloc()),
+        BlocProvider<CartBloc>(create: (context) => CartBloc()),
+        BlocProvider<OrderHistoryCubit>(create: (context) => OrderHistoryCubit()),
       ],
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, themeState) {
@@ -33,7 +35,7 @@ class MyApp extends StatelessWidget {
             theme: AppTheme.lightTheme(),
             darkTheme: AppTheme.darkTheme(),
             themeMode: themeState.themeMode,
-            home: UploadPhotoMethodScreen(),
+            home: SplashScreen(),
           );
         },
       ),

@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:uic_task/features/home/presentation/screens/home_screen.dart';
+import 'package:uic_task/features/orders/presentation/orders_details.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/common/constants/colors/app_colors.dart';
+import '../../../orders/presentation/bloc/cart_bloc.dart';
+import '../../../orders/presentation/order_history_screen.dart';
+import '../../../chat/presentation/screens/chat_list_screen.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -15,8 +20,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   static final List<Widget> _pages = <Widget>[
     HomeScreen(),
-    const Center(child: Text('Shop Page', style: TextStyle(fontSize: 24))),
-    const Center(child: Text('Messages Page', style: TextStyle(fontSize: 24))),
+    OrderHistoryScreen(),
+    ChatListScreen(),
     const Center(child: Text('Profile Page', style: TextStyle(fontSize: 24))),
   ];
 
@@ -38,6 +43,44 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedIndex],
+      floatingActionButton: BlocBuilder<CartBloc, CartState>(
+        builder: (context, state) {
+          final count = state.items.fold<int>(
+            0,
+            (sum, item) => sum + item.quantity,
+          );
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              FloatingActionButton(
+                backgroundColor: AppColors.primary,
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => OrderDetailsScreen()),
+                  );
+                },
+                child: Icon(Icons.shopping_cart, color: Colors.white),
+              ),
+              if (count > 0)
+                Positioned(
+                  right: -2,
+                  top: -2,
+                  child: Container(
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '$count',
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ),
+                ),
+            ],
+          );
+        },
+      ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(24),
         child: Container(
@@ -62,9 +105,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 onTap: () => _onItemTapped(index),
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 200),
-                  padding: EdgeInsets.symmetric(horizontal: isSelected ? 16 : 0, vertical: 8),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isSelected ? 16 : 0,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
-                    color: isSelected ? Colors.pink.shade50 : Colors.transparent,
+                    color: isSelected
+                        ? Colors.pink.shade50
+                        : Colors.transparent,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(

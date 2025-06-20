@@ -9,7 +9,6 @@ import 'package:uic_task/core/utils/responsiveness/app_responsive.dart';
 import 'package:uic_task/service_locator.dart';
 import '../../../../core/common/textstyles/app_textstyles.dart';
 import 'package:uic_task/features/auth/presentation/screens/congrats_screen.dart';
-import 'package:uic_task/features/home/presentation/screens/home_screen.dart';
 
 class SetLocationScreen extends StatefulWidget {
   const SetLocationScreen({super.key});

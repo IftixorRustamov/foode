@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:uic_task/core/common/constants/colors/app_colors.dart';
+import 'package:uic_task/core/common/constants/sizes.dart';
 import 'package:uic_task/core/common/widgets/button/default_button.dart';
 import 'package:uic_task/core/routes/custom_router.dart';
 import 'package:uic_task/core/utils/responsiveness/app_responsive.dart';
 import 'package:uic_task/features/home/presentation/screens/home_screen.dart';
+import 'package:uic_task/features/home/presentation/widgets/bottom_nav_bar.dart';
 import 'package:uic_task/service_locator.dart';
 import '../../../../core/common/textstyles/app_textstyles.dart';
 
@@ -26,7 +28,7 @@ class _CongratsScreenState extends State<CongratsScreen> {
   }
 
   void _goHome() {
-    CustomRouter.go(const HomeScreen());
+    CustomRouter.go(const BottomNavBar());
   }
 
   @override
@@ -37,7 +39,7 @@ class _CongratsScreenState extends State<CongratsScreen> {
       body: SafeArea(
         child: Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: appW(24)),
+            padding: btm48,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -81,11 +83,7 @@ class _CongratsScreenState extends State<CongratsScreen> {
                   textAlign: TextAlign.center,
                 ),
                 const Spacer(),
-                DefaultButton(
-                  text: 'Go homepage',
-                  onPressed: _goHome,
-                ),
-                SizedBox(height: appH(32)),
+                DefaultButton(text: 'Go homepage', onPressed: _goHome),
               ],
             ),
           ),
@@ -93,4 +91,4 @@ class _CongratsScreenState extends State<CongratsScreen> {
       ),
     );
   }
-} 
+}

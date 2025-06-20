@@ -9,6 +9,7 @@ class FoodCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final String price;
+  final VoidCallback? onTap;
 
   const FoodCard({
     super.key,
@@ -16,61 +17,65 @@ class FoodCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.price,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     final AppTextStyles textStyles = sl<AppTextStyles>();
 
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          BoxShadow(color: Colors.black12, blurRadius: 9, offset: Offset(0, 2)),
-        ],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              imagePath,
-              height: appH(50),
-              width: appW(50),
-              fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: [
+            BoxShadow(color: Colors.black12, blurRadius: 9, offset: Offset(0, 2)),
+          ],
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.network(
+                imagePath,
+                height: appH(50),
+                width: appW(50),
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          SizedBox(width: appW(12)),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: textStyles.semiBold(
-                    fontSize: 16,
-                    color: AppColors.black,
+            SizedBox(width: appW(12)),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: textStyles.semiBold(
+                      fontSize: 16,
+                      color: AppColors.black,
+                    ),
                   ),
-                ),
-                SizedBox(height: appH(4)),
-                Text(
-                  subtitle,
-                  style: textStyles.regular(
-                    color: AppColors.neutral1,
-                    fontSize: 13,
+                  SizedBox(height: appH(4)),
+                  Text(
+                    subtitle,
+                    style: textStyles.regular(
+                      color: AppColors.neutral1,
+                      fontSize: 13,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Text(
-            "\$$price",
-            style: textStyles.semiBold(fontSize: 26, color: Colors.redAccent),
-          ),
-        ],
+            Text(
+              "\$$price",
+              style: textStyles.semiBold(fontSize: 26, color: Colors.redAccent),
+            ),
+          ],
+        ),
       ),
     );
   }
